@@ -3,7 +3,7 @@ from aioauth.oidc.core.grant_type import AuthorizationCodeGrantType
 from aioauth.requests import Request as OAuth2Request
 from aioauth.server import AuthorizationServer
 from aioauth_fastapi.forms import TokenIntrospectForm
-from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request, oidc_request_factory
+from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request
 from fastapi import APIRouter, Depends, Request
 
 from .storage import Storage
@@ -31,7 +31,7 @@ async def token(
 ):
     oauth2_storage = Storage(storage=storage)
     authorization_server = AuthorizationServer(storage=oauth2_storage, grant_types=grant_types)
-    oauth2_request: OAuth2Request = await to_oauth2_request(request, settings, request_factory=oidc_request_factory)
+    oauth2_request: OAuth2Request = await to_oauth2_request(request, settings)
     oauth2_response = await authorization_server.create_token_response(oauth2_request)
     return await to_fastapi_response(oauth2_response)
 
