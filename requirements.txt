@@ -1,0 +1,14 @@
+fastapi==0.109.0
+uvicorn==0.25.0
+aioauth==1.5.4
+aioauth-fastapi==0.1.2
+sqlmodel==0.0.14
+alembic==1.13.1
+aiosqlite==0.19.0
+python-jose[cryptography]==3.3.0
+python-multipart==0.0.6
+orjson==3.9.10
+pydantic~=2.5.3
+pydantic-settings==2.1.0
+SQLAlchemy~=2.0.25
+starlette~=0.35.1
