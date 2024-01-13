@@ -9,6 +9,7 @@ Core utils for integration with FastAPI
 """
 
 import json
+import base64
 from dataclasses import dataclass
 from typing import Callable, Dict, Optional
 
@@ -32,6 +33,24 @@ class RequestArguments:
 
 
 def default_request_factory(request_args: RequestArguments) -> OAuth2Request:
+    return OAuth2Request(
+        headers=request_args.headers,
+        method=request_args.method,  # type: ignore
+        post=Post(**request_args.post_args),  # type: ignore
+        query=Query(**request_args.query_args),  # type: ignore
+        settings=request_args.settings,
+        url=request_args.url,
+        user=request_args.user,
+    )
+
+
+def oidc_request_factory(request_args: RequestArguments) -> OAuth2Request:
+    """OIDC request factory"""
+    auth = request_args.headers.get("Authorization")
+    if auth:
+        client_id, client_secret = base64.b64decode(auth.split(" ")[1]).decode().split(":")
+        request_args.post_args["client_id"] = client_id
+        request_args.post_args["client_secret"] = client_secret
     return OAuth2Request(
         headers=request_args.headers,
         method=request_args.method,  # type: ignore

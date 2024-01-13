@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from starlette.middleware.authentication import AuthenticationMiddleware
@@ -9,6 +11,7 @@ from .oauth2 import endpoints as oauth2_endpoints
 from .users import endpoints as users_endpoints
 from .users.backends import TokenAuthenticationBackend
 
+logging.basicConfig(level=logging.DEBUG)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     docs_url="/api/openapi",
