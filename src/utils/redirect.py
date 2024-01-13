@@ -74,5 +74,5 @@ class RedirectResponseBuilder:
     def headers(self) -> MutableHeaders:
         return MutableHeaders(raw=self.raw_headers)
 
-    def build(self, url):
-        return RedirectResponse(url, headers=self.headers)
+    def build(self, url: str, status_code: int = 307):
+        return RedirectResponse(url, headers=self.headers, status_code=status_code)

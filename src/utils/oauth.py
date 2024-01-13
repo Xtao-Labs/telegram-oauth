@@ -29,4 +29,4 @@ async def back_auth_request(request: Request, access_token: str, refresh_token: 
     resp.set_cookie("access_token", access_token, max_age=settings.ACCESS_TOKEN_EXP)
     resp.set_cookie("refresh_token", refresh_token, max_age=settings.ACCESS_TOKEN_EXP)
     resp.delete_cookie("SEND")
-    return resp.build(f"/oauth2/authorize?{params}")
+    return resp.build(f"/oauth2/authorize?{params}", status_code=303)
