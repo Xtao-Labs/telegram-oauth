@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .events import on_shutdown, on_startup
@@ -26,5 +27,11 @@ app.include_router(
     prefix="/oauth2",
     tags=["oauth2"],
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_middleware(AuthenticationMiddleware, backend=TokenAuthenticationBackend())

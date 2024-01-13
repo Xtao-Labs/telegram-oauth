@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic_settings import BaseSettings
 
 
@@ -14,6 +16,8 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXP: int = 900  # 15 minutes
     REFRESH_TOKEN_EXP: int = 86400  # 1 day
+
+    CORS_ORIGINS: List[str] = ["*"]
 
     class Config:
         env_file = ".env"
