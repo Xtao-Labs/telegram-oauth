@@ -1,9 +1,9 @@
 from fastapi.security.utils import get_authorization_scheme_param
 from starlette.authentication import AuthCredentials, AuthenticationBackend
 
-from ..config import settings
 from .crypto import authenticate, read_rsa_key_from_env
 from .models import User, UserAnonymous
+from ..config import settings
 
 
 class TokenAuthenticationBackend(AuthenticationBackend):

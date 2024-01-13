@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
-from fastapi.security import APIKeyHeader
 from starlette.middleware.authentication import AuthenticationMiddleware
 
 from .config import settings
@@ -8,8 +7,6 @@ from .events import on_shutdown, on_startup
 from .oauth2 import endpoints as oauth2_endpoints
 from .users import endpoints as users_endpoints
 from .users.backends import TokenAuthenticationBackend
-
-api_key_header = APIKeyHeader(name="authorization", auto_error=False)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

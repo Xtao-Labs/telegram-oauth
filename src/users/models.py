@@ -5,7 +5,7 @@ from sqlalchemy import Column, BigInteger
 from sqlmodel.main import Field, Relationship
 
 from ..storage.models import BaseTable
-from ..users.crypto import make_random_password, pbkdf2, verify
+from ..users.crypto import make_random_password, pbkdf2
 
 if TYPE_CHECKING:  # pragma: no cover
     from ..oauth2.models import AuthorizationCode, Client, Token

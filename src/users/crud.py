@@ -3,8 +3,8 @@ from typing import Optional
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
-from ..storage.sqlalchemy import SQLAlchemyStorage
 from .models import User
+from ..storage.sqlalchemy import SQLAlchemyStorage
 
 
 class SQLAlchemyCRUD:

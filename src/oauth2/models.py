@@ -1,8 +1,6 @@
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 
 from pydantic.types import UUID4
-from sqlalchemy.sql.schema import Column
-from sqlmodel import ARRAY, String
 from sqlmodel.main import Field, Relationship
 
 from ..storage.models import BaseTable

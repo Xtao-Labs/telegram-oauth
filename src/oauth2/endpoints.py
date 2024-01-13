@@ -1,15 +1,15 @@
 from aioauth.config import Settings
-from aioauth.requests import Query, Request as OAuth2Request
+from aioauth.requests import Request as OAuth2Request
 from aioauth.server import AuthorizationServer
-from fastapi import APIRouter, Depends, Request
-
 from aioauth_fastapi.forms import TokenForm, TokenIntrospectForm
 from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request
+from fastapi import APIRouter, Depends, Request
 
+from .storage import Storage
 from ..config import settings as local_settings
 from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
-from .storage import Storage
 from ..users.crypto import get_pub_key_resp
+from ..utils.oauth import to_login_request
 
 router = APIRouter()
 
@@ -51,9 +51,10 @@ async def token_introspect(
 @router.get("/authorize")
 async def authorize(
     request: Request,
-    query: Query = Depends(),
     storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
 ):
+    if not request.user.is_authenticated:
+        return await to_login_request(request)
     oauth2_storage = Storage(storage=storage)
     authorization_server = AuthorizationServer(storage=oauth2_storage)
     oauth2_request: OAuth2Request = await to_oauth2_request(request, settings)

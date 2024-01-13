@@ -1,41 +1,46 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, Form
+from starlette.requests import Request
 
-from ..config import settings
-from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
 from .crud import SQLAlchemyCRUD
 from .crypto import get_jwt
-from .requests import UserLogin
 from .responses import TokenResponse
+from ..config import settings
+from ..html import templates
+from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
+from ..utils.oauth import back_auth_request
 
 router = APIRouter()
-html = open("html/login.html", "r", encoding="utf-8").read()
 
 
 @router.get("/login", name="users:login:get")
-async def user_login_get():
-    return Response(content=html, status_code=HTTPStatus.OK)
+async def user_login_get(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 
 @router.post("/login", name="users:login")
 async def user_login(
+    request: Request,
     response: Response,
-    body: UserLogin,
+    username: str = Form(),
+    password: str = Form(),
     storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
 ):
     crud = SQLAlchemyCRUD(storage=storage)
-    user = await crud.get(username=body.username)
+    user = await crud.get(username=username)
 
     if user is None:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
 
-    is_verified = user.verify_password(body.password)
+    is_verified = user.verify_password(password)
 
     if is_verified:
         access_token, refresh_token = get_jwt(user)
         # NOTE: Setting expire causes an exception for requests library:
         # https://github.com/psf/requests/issues/6004
+        if resp := await back_auth_request(request, access_token, refresh_token):
+            return resp
         response.set_cookie(
             key="access_token", value=access_token, max_age=settings.ACCESS_TOKEN_EXP
         )

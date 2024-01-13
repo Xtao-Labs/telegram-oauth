@@ -138,10 +138,14 @@ def get_pub_key_resp():
 def encode_jwt(
         expires_delta,
         sub,
-        secret,
-        additional_claims: Dict = {},
+        secret=None,
+        additional_claims=None,
         algorithm=constants.ALGORITHMS.RS256,
 ):
+    if additional_claims is None:
+        additional_claims = {}
+    if secret is None:
+        secret = read_rsa_key_from_env(settings.JWT_PRIVATE_KEY)
     now = datetime.now(timezone.utc)
 
     claims = {
@@ -162,9 +166,13 @@ def encode_jwt(
 
 def decode_jwt(
         encoded_token,
-        secret,
-        algorithms=[constants.ALGORITHMS.RS256],
+        secret=None,
+        algorithms=None,
 ):
+    if algorithms is None:
+        algorithms = constants.ALGORITHMS.RS256
+    if secret is None:
+        secret = read_rsa_key_from_env(settings.JWT_PRIVATE_KEY)
     return jwt.decode(
         encoded_token,
         secret,
@@ -175,7 +183,6 @@ def decode_jwt(
 def get_jwt(user):
     access_token = encode_jwt(
         sub=str(user.id),
-        secret=read_rsa_key_from_env(settings.JWT_PRIVATE_KEY),
         expires_delta=settings.ACCESS_TOKEN_EXP,
         additional_claims={
             "token_type": "access",
@@ -188,7 +195,6 @@ def get_jwt(user):
 
     refresh_token = encode_jwt(
         sub=str(user.id),
-        secret=read_rsa_key_from_env(settings.JWT_PRIVATE_KEY),
         expires_delta=settings.REFRESH_TOKEN_EXP,
         additional_claims={
             "token_type": "refresh",
