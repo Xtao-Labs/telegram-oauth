@@ -5,7 +5,6 @@ from sqlalchemy import Column, BigInteger
 from sqlmodel.main import Field, Relationship
 
 from ..storage.models import BaseTable
-from ..users.crypto import make_random_password, pbkdf2
 
 if TYPE_CHECKING:  # pragma: no cover
     from ..oauth2.models import AuthorizationCode, Client, Token
@@ -33,27 +32,6 @@ class User(BaseTable, table=True):  # type: ignore
         back_populates="user"
     )
     user_tokens: List["Token"] = Relationship(back_populates="user")
-
-    def set_password(self, password) -> None:
-        """
-        Sets users password using pbkdf2.
-        """
-        self.password = pbkdf2(password)
-
-    def set_random_password(self) -> None:
-        """
-        Set random password.
-        """
-        password = make_random_password()
-        self.password = pbkdf2(password)
-
-    def verify_password(self, password: str) -> bool:
-        """
-        Verify users password
-        """
-        if self.password is None:
-            return False
-        return password == self.password
 
     @property
     def is_authenticated(self) -> bool:

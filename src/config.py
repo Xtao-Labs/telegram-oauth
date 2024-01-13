@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: List[str] = ["*"]
 
+    BOT_TOKEN: str
+
     class Config:
         env_file = ".env"
         case_sensitive = True

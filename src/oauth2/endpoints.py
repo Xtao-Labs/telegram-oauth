@@ -2,10 +2,9 @@ from aioauth.config import Settings
 from aioauth.oidc.core.grant_type import AuthorizationCodeGrantType
 from aioauth.requests import Request as OAuth2Request
 from aioauth.server import AuthorizationServer
-from aioauth_fastapi.forms import TokenIntrospectForm
-from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request
 from fastapi import APIRouter, Depends, Request
 
+from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request
 from .storage import Storage
 from ..config import settings as local_settings
 from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
@@ -26,8 +25,8 @@ grant_types = {
 
 @router.post("/token")
 async def token(
-    request: Request,
-    storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
+        request: Request,
+        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
 ):
     oauth2_storage = Storage(storage=storage)
     authorization_server = AuthorizationServer(storage=oauth2_storage, grant_types=grant_types)
@@ -36,25 +35,10 @@ async def token(
     return await to_fastapi_response(oauth2_response)
 
 
-@router.post("/token/introspect")
-async def token_introspect(
-    request: Request,
-    form: TokenIntrospectForm = Depends(),
-    storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
-):
-    oauth2_storage = Storage(storage=storage)
-    authorization_server = AuthorizationServer(storage=oauth2_storage, grant_types=grant_types)
-    oauth2_request: OAuth2Request = await to_oauth2_request(request, settings)
-    oauth2_response = await authorization_server.create_token_introspection_response(
-        oauth2_request
-    )
-    return await to_fastapi_response(oauth2_response)
-
-
 @router.get("/authorize")
 async def authorize(
-    request: Request,
-    storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
+        request: Request,
+        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
 ):
     if not request.user.is_authenticated:
         return await to_login_request(request)

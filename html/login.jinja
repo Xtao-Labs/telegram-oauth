@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .main {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 20px;
+            width: 260px;
+            height: 20px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <script async src="https://telegram.org/js/telegram-widget.js?22"
+            data-telegram-login="PaigramTeamBot"
+            data-size="large"
+            data-auth-url="{{ callback_url }}"
+            data-request-access="write">
+    </script>
+</div>
+</body>
+</html>

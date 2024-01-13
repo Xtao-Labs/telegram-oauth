@@ -33,7 +33,7 @@ class SQLAlchemyTransaction:
 
 class SQLAlchemyStorage:
     def __init__(
-        self, session: AsyncSession, transaction: SQLAlchemyTransaction
+            self, session: AsyncSession, transaction: SQLAlchemyTransaction
     ) -> None:
         self.session = session
         self.transaction = transaction

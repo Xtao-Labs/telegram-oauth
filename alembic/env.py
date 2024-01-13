@@ -26,6 +26,7 @@ config.set_main_option("sqlalchemy.url", str(settings.CONN_URI))
 # target_metadata = mymodel.Base.metadata
 target_metadata = SQLModel.metadata  # type: ignore
 
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")

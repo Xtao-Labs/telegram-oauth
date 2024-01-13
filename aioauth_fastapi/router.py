@@ -56,14 +56,13 @@ from .utils import (
     to_oauth2_request,
 )
 
-
 ARequest = TypeVar("ARequest", bound=TRequest)
 
 
 def get_oauth2_router(
-    authorization_server: AuthorizationServer[ARequest, TStorage],
-    settings: Settings = Settings(),
-    request_factory: Callable[[RequestArguments], ARequest] = default_request_factory,
+        authorization_server: AuthorizationServer[ARequest, TStorage],
+        settings: Settings = Settings(),
+        request_factory: Callable[[RequestArguments], ARequest] = default_request_factory,
 ) -> APIRouter:
     """Function will create FastAPI router with the following oauth2 endpoints:
 

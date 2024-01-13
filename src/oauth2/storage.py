@@ -70,12 +70,12 @@ class Storage(BaseStorage):
         return user
 
     async def create_token(
-        self,
-        request: Request,
-        client_id: str,
-        scope: str,
-        access_token: str,
-        refresh_token: str,
+            self,
+            request: Request,
+            client_id: str,
+            scope: str,
+            access_token: str,
+            refresh_token: str,
     ) -> Token:
         """
         Create token and store it in storage.
@@ -115,11 +115,11 @@ class Storage(BaseStorage):
         return token
 
     async def revoke_token(
-        self,
-        request: Request,
-        token_type: Optional[TokenType] = "refresh_token",
-        access_token: Optional[str] = None,
-        refresh_token: Optional[str] = None,
+            self,
+            request: Request,
+            token_type: Optional[TokenType] = "refresh_token",
+            access_token: Optional[str] = None,
+            refresh_token: Optional[str] = None,
     ) -> None:
         """
         Remove refresh_token from whitelist.
@@ -135,12 +135,12 @@ class Storage(BaseStorage):
             await self.storage.add(token_record)
 
     async def get_token(
-        self,
-        request: Request,
-        client_id: str,
-        token_type: Optional[str] = "refresh_token",
-        access_token: Optional[str] = None,
-        refresh_token: Optional[str] = None,
+            self,
+            request: Request,
+            client_id: str,
+            token_type: Optional[str] = "refresh_token",
+            access_token: Optional[str] = None,
+            refresh_token: Optional[str] = None,
     ) -> Optional[Token]:
         if token_type == "refresh_token":
             q = select(TokenDB).where(TokenDB.refresh_token == refresh_token)
@@ -168,16 +168,16 @@ class Storage(BaseStorage):
             )
 
     async def create_authorization_code(
-        self,
-        request: Request,
-        client_id: str,
-        scope: str,
-        response_type: ResponseType,
-        redirect_uri: str,
-        code_challenge_method: Optional[CodeChallengeMethod],
-        code_challenge: Optional[str],
-        code: str,
-        **kwargs,
+            self,
+            request: Request,
+            client_id: str,
+            scope: str,
+            response_type: ResponseType,
+            redirect_uri: str,
+            code_challenge_method: Optional[CodeChallengeMethod],
+            code_challenge: Optional[str],
+            code: str,
+            **kwargs,
     ) -> AuthorizationCode:
         authorization_code = AuthorizationCode(
             auth_time=int(datetime.now(tz=timezone.utc).timestamp()),
@@ -211,7 +211,7 @@ class Storage(BaseStorage):
         return authorization_code
 
     async def get_client(
-        self, request: Request, client_id: str, client_secret: Optional[str] = None
+            self, request: Request, client_id: str, client_secret: Optional[str] = None
     ) -> Optional[Client]:
         q_results = await self.storage.select(
             select(ClientDB).where(ClientDB.client_id == client_id)
@@ -233,7 +233,7 @@ class Storage(BaseStorage):
         )
 
     async def get_authorization_code(
-        self, request: Request, client_id: str, code: str
+            self, request: Request, client_id: str, code: str
     ) -> Optional[AuthorizationCode]:
         q_results = await self.storage.select(
             select(AuthorizationCodeDB).where(AuthorizationCodeDB.code == code)
@@ -259,20 +259,20 @@ class Storage(BaseStorage):
         )
 
     async def delete_authorization_code(
-        self, request: Request, client_id: str, code: str
+            self, request: Request, client_id: str, code: str
     ) -> None:
         await self.storage.delete(
             delete(AuthorizationCodeDB).where(AuthorizationCodeDB.code == code)
         )
 
     async def get_id_token(
-        self,
-        request: Request,
-        client_id: str,
-        scope: str,
-        response_type: ResponseType,
-        redirect_uri: str,
-        **kwargs,
+            self,
+            request: Request,
+            client_id: str,
+            scope: str,
+            response_type: ResponseType,
+            redirect_uri: str,
+            **kwargs,
     ) -> str:
         scopes = enforce_list(scope)
         user = await self.get_user(request)

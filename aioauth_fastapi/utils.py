@@ -9,7 +9,6 @@ Core utils for integration with FastAPI
 """
 
 import json
-import base64
 from dataclasses import dataclass
 from typing import Callable, Dict, Optional
 
@@ -45,9 +44,9 @@ def default_request_factory(request_args: RequestArguments) -> OAuth2Request:
 
 
 async def to_oauth2_request(
-    request: Request,
-    settings: Settings = Settings(),
-    request_factory: Callable[[RequestArguments], TRequest] = default_request_factory,
+        request: Request,
+        settings: Settings = Settings(),
+        request_factory: Callable[[RequestArguments], TRequest] = default_request_factory,
 ) -> TRequest:
     """Converts :py:class:`fastapi.Request` instance to :py:class:`aioauth.requests.Request` instance"""
     form = await request.form()
