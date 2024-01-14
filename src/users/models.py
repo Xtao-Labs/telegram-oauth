@@ -7,7 +7,7 @@ from sqlmodel.main import Field, Relationship
 from ..storage.models import BaseTable
 
 if TYPE_CHECKING:  # pragma: no cover
-    from ..oauth2.models import AuthorizationCode, Client, Token
+    from ..oauth2.models import AuthorizationCode, Token
 
 
 class UserAnonymous(BaseModel):
@@ -27,7 +27,6 @@ class User(BaseTable, table=True):  # type: ignore
     password: Optional[str] = None
     tg_id: int = Field(sa_column=Column(BigInteger(), nullable=False))
 
-    user_clients: List["Client"] = Relationship(back_populates="user")
     user_authorization_codes: List["AuthorizationCode"] = Relationship(
         back_populates="user"
     )
