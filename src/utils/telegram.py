@@ -40,6 +40,6 @@ async def decode_telegram_auth_data(params: QueryParams) -> Optional[int]:
     data = decode_jwt(jwt)
     now = datetime.now(timezone.utc)
     uid, exp = data["sub"], data["exp"]
-    if exp < (settings.ACCESS_TOKEN_EXP + now):
+    if exp < now.timestamp():
         return None
     return int(uid)

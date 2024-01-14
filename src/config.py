@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Telegram OAuth"
     PROJECT_URL: str = "http://127.0.0.1:8081"
+    PROJECT_LOGIN_SUCCESS_URL: str = "http://google.com"
     PROJECT_HOST: str = "127.0.0.1"
     PROJECT_PORT: int = 8001
     DEBUG: bool = True

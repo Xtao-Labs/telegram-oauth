@@ -20,13 +20,19 @@ async def to_login_request(request: Request) -> RedirectResponse:
     return resp.build("/api/users/login")
 
 
-async def back_auth_request(request: Request, access_token: str, refresh_token: str) -> Optional[RedirectResponse]:
+async def back_auth_request(
+        request: Request,
+        access_token: str = None,
+        refresh_token: str = None,
+) -> Optional[RedirectResponse]:
     cookie = request.cookies.get("SEND")
     if cookie is None:
         return None
     params = decode_jwt(cookie)["params"]
     resp = RedirectResponseBuilder()
-    resp.set_cookie("access_token", access_token, max_age=settings.ACCESS_TOKEN_EXP)
-    resp.set_cookie("refresh_token", refresh_token, max_age=settings.ACCESS_TOKEN_EXP)
+    if access_token:
+        resp.set_cookie("access_token", access_token, max_age=settings.ACCESS_TOKEN_EXP)
+    if refresh_token:
+        resp.set_cookie("refresh_token", refresh_token, max_age=settings.ACCESS_TOKEN_EXP)
     resp.delete_cookie("SEND")
     return resp.build(f"/oauth2/authorize?{params}", status_code=303)
