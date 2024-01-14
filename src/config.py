@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = ["*"]
 
     BOT_TOKEN: str
+    BOT_USERNAME: str
+    BOT_API_ID: int
+    BOT_API_HASH: str
 
     class Config:
         env_file = ".env"

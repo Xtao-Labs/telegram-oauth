@@ -19,7 +19,10 @@ router = APIRouter()
 async def user_login_get(request: Request):
     url = request.url
     callback_url = str(url).replace("/login", "/callback")
-    return templates.TemplateResponse("login.jinja", {"request": request, "callback_url": callback_url})
+    return templates.TemplateResponse(
+        "login.jinja",
+        {"request": request, "callback_url": callback_url, "username": settings.BOT_USERNAME}
+    )
 
 
 @router.get("/callback", name="users:login")

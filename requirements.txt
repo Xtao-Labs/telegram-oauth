@@ -13,3 +13,8 @@ pydantic~=2.5.3
 pydantic-settings==2.1.0
 SQLAlchemy~=2.0.25
 starlette~=0.35.1
+pyrogram==2.0.106
+tgcrypto==1.2.5
+pytz~=2023.3.post1
+APScheduler~=3.10.4
+coloredlogs~=15.0.1
