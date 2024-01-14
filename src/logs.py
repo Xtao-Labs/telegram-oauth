@@ -1,4 +1,4 @@
-from logging import getLogger, StreamHandler, basicConfig, INFO, CRITICAL
+from logging import getLogger, StreamHandler, basicConfig, INFO, CRITICAL, ERROR
 
 from coloredlogs import ColoredFormatter
 
@@ -15,5 +15,7 @@ sql_logger = getLogger("sqlalchemy")
 sql_logger.setLevel(CRITICAL)
 sql_engine_logger = getLogger("sqlalchemy.engine.Engine")
 sql_engine_logger.setLevel(CRITICAL)
-basicConfig(level=CRITICAL)
+aioauth_logger = getLogger("aioauth")
+aioauth_logger.setLevel(INFO)
+basicConfig(level=ERROR)
 logs.setLevel(INFO)
