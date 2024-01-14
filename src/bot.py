@@ -1,3 +1,4 @@
+import pyromod.listen
 from pyrogram import Client
 
 from .config import settings
