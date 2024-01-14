@@ -9,7 +9,7 @@ class Client(PyroClient):  # noqa
         return
 
     async def ask(
-        self, chat_id, text, filters=None, timeout=None, *args, **kwargs
+            self, chat_id, text, filters=None, timeout=None, *args, **kwargs
     ) -> Optional["Message"]:
         return
 

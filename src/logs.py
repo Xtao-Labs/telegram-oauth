@@ -1,4 +1,5 @@
-from logging import getLogger, StreamHandler, ERROR, basicConfig, INFO, DEBUG
+from logging import getLogger, StreamHandler, ERROR, basicConfig, INFO
+
 from coloredlogs import ColoredFormatter
 
 logs = getLogger("telegram-oauth")

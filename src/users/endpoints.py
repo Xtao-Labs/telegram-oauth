@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException, Response
+from jose import JWTError
 from starlette.requests import Request
 
 from .crud import SQLAlchemyCRUD
@@ -10,7 +11,7 @@ from ..config import settings
 from ..html import templates
 from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
 from ..utils.oauth import back_auth_request
-from ..utils.telegram import verify_telegram_auth_data
+from ..utils.telegram import decode_telegram_auth_data, verify_telegram_auth_data
 
 router = APIRouter()
 
@@ -25,13 +26,12 @@ async def user_login_get(request: Request):
     )
 
 
-@router.get("/callback", name="users:login")
-async def user_login(
+async def auth(
+        tg_id: int,
         request: Request,
         response: Response,
-        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
+        storage: SQLAlchemyStorage,
 ):
-    tg_id = await verify_telegram_auth_data(request.query_params)
     if tg_id is None:
         raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED)
     crud = SQLAlchemyCRUD(storage=storage)
@@ -52,3 +52,26 @@ async def user_login(
         key="refresh_token", value=refresh_token, max_age=settings.REFRESH_TOKEN_EXP
     )
     return TokenResponse(access_token=access_token, refresh_token=refresh_token)
+
+
+@router.get("/callback", name="users:login")
+async def user_login(
+        request: Request,
+        response: Response,
+        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
+):
+    tg_id = await verify_telegram_auth_data(request.query_params)
+    return await auth(tg_id, request, response, storage)
+
+
+@router.get("/auth", name="users:auth")
+async def user_auth(
+        request: Request,
+        response: Response,
+        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
+):
+    try:
+        tg_id = await decode_telegram_auth_data(request.query_params)
+    except JWTError:
+        tg_id = None
+    return await auth(tg_id, request, response, storage)

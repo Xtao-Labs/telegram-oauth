@@ -14,7 +14,7 @@ async def to_login_request(request: Request) -> RedirectResponse:
     for key, value in query_params.items():
         params += f"{key}={value}&"
     params = params[:-1]
-    jwt = encode_jwt(900, "", additional_claims={"params": params})
+    jwt = encode_jwt(settings.ACCESS_TOKEN_EXP, "", additional_claims={"params": params})
     resp = RedirectResponseBuilder()
     resp.set_cookie("SEND", jwt, max_age=settings.ACCESS_TOKEN_EXP)
     return resp.build("/api/users/login")

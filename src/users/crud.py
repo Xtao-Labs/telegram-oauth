@@ -2,9 +2,10 @@ from typing import Optional
 
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
+from sqlalchemy.sql.expression import Update
 
 from .models import User
-from ..storage.sqlalchemy import SQLAlchemyStorage
+from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
 
 
 class SQLAlchemyCRUD:
@@ -25,5 +26,15 @@ class SQLAlchemyCRUD:
 
     async def create(self, **kwargs) -> None:
         user = User(**kwargs)
-        user.set_password(kwargs.get("password"))
         await self.storage.add(user)
+
+    async def update(self, user: User, **kwargs) -> None:
+        await self.storage.update(
+            Update(User).where(User.id == user.id).values(**kwargs)
+        )
+
+
+def get_user_crud(storage: SQLAlchemyStorage = None) -> SQLAlchemyCRUD:
+    if storage is None:
+        storage = get_sqlalchemy_storage()
+    return SQLAlchemyCRUD(storage=storage)

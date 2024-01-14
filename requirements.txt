@@ -18,3 +18,4 @@ tgcrypto==1.2.5
 pytz~=2023.3.post1
 APScheduler~=3.10.4
 coloredlogs~=15.0.1
+httpx==0.26.0

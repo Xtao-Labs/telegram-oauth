@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+          integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <style>
         .main {
             text-align: center;
@@ -27,6 +30,11 @@
             data-auth-url="{{ callback_url }}"
             data-request-access="write">
     </script>
+    <div>
+        <a href="https://t.me/{{ username }}?start=login">
+            <button type="button" class="btn btn-primary">通过 BOT 登录</button>
+        </a>
+    </div>
 </div>
 </body>
 </html>

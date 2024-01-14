@@ -1,9 +1,9 @@
 import contextlib
 import datetime
+from typing import TYPE_CHECKING
 
 import pytz
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.telegram.enums import Message
@@ -28,6 +28,6 @@ def add_delete_message_job(message: "Message", delete_seconds: int = 60):
         name=f"{message.chat.id}|{message.id}|delete_message",
         args=[message],
         run_date=datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
-        + datetime.timedelta(seconds=delete_seconds),
+                 + datetime.timedelta(seconds=delete_seconds),
         replace_existing=True,
     )

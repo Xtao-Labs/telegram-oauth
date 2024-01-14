@@ -1,5 +1,4 @@
 import asyncio
-
 from signal import signal as signal_fn, SIGINT, SIGTERM, SIGABRT
 
 from src.app import web
