@@ -127,11 +127,6 @@ def upgrade():
         sa.Column("client_id", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("client_secret", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("scope", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("user_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-        ),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_client_client_id"), "client", ["client_id"], unique=False)
@@ -140,7 +135,6 @@ def upgrade():
     )
     op.create_index(op.f("ix_client_id"), "client", ["id"], unique=True)
     op.create_index(op.f("ix_client_scope"), "client", ["scope"], unique=False)
-    op.create_index(op.f("ix_client_user_id"), "client", ["user_id"], unique=False)
     op.create_table(
         "token",
         sa.Column("id", sqlmodel.sql.sqltypes.GUID(), nullable=False),

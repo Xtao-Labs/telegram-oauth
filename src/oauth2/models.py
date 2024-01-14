@@ -18,9 +18,6 @@ class Client(BaseTable, table=True):  # type: ignore
 
     scope: str
 
-    user_id: UUID4 = Field(foreign_key="users.id", nullable=False)
-    user: "User" = Relationship(back_populates="user_clients")
-
 
 class AuthorizationCode(BaseTable, table=True):  # type: ignore
     code: str
