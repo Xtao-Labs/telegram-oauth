@@ -154,16 +154,10 @@ def upgrade():
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        op.f("ix_token_access_token"), "token", ["access_token"], unique=False
-    )
     op.create_index(op.f("ix_token_client_id"), "token", ["client_id"], unique=False)
     op.create_index(op.f("ix_token_expires_in"), "token", ["expires_in"], unique=False)
     op.create_index(op.f("ix_token_id"), "token", ["id"], unique=True)
     op.create_index(op.f("ix_token_issued_at"), "token", ["issued_at"], unique=False)
-    op.create_index(
-        op.f("ix_token_refresh_token"), "token", ["refresh_token"], unique=False
-    )
     op.create_index(
         op.f("ix_token_refresh_token_expires_in"),
         "token",
@@ -184,14 +178,11 @@ def downgrade():
     op.drop_index(op.f("ix_token_scope"), table_name="token")
     op.drop_index(op.f("ix_token_revoked"), table_name="token")
     op.drop_index(op.f("ix_token_refresh_token_expires_in"), table_name="token")
-    op.drop_index(op.f("ix_token_refresh_token"), table_name="token")
     op.drop_index(op.f("ix_token_issued_at"), table_name="token")
     op.drop_index(op.f("ix_token_id"), table_name="token")
     op.drop_index(op.f("ix_token_expires_in"), table_name="token")
     op.drop_index(op.f("ix_token_client_id"), table_name="token")
-    op.drop_index(op.f("ix_token_access_token"), table_name="token")
     op.drop_table("token")
-    op.drop_index(op.f("ix_client_user_id"), table_name="client")
     op.drop_index(op.f("ix_client_scope"), table_name="client")
     op.drop_index(op.f("ix_client_id"), table_name="client")
     op.drop_index(op.f("ix_client_client_secret"), table_name="client")
