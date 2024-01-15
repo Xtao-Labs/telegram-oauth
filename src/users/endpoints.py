@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 from fastapi import APIRouter, Depends, HTTPException
-from jose import JWTError
 from starlette.requests import Request
 
 from .crud import SQLAlchemyCRUD
@@ -11,7 +10,7 @@ from ..html import templates
 from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
 from ..utils.oauth import back_auth_request
 from ..utils.redirect import RedirectResponseBuilder
-from ..utils.telegram import decode_telegram_auth_data, verify_telegram_auth_data
+from ..utils.telegram import verify_telegram_auth_data
 
 router = APIRouter()
 
@@ -64,16 +63,4 @@ async def user_login(
         storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
 ):
     tg_id = await verify_telegram_auth_data(request.query_params)
-    return await auth(tg_id, request, storage)
-
-
-@router.get("/auth", name="users:auth")
-async def user_auth(
-        request: Request,
-        storage: SQLAlchemyStorage = Depends(get_sqlalchemy_storage),
-):
-    try:
-        tg_id = await decode_telegram_auth_data(request.query_params)
-    except JWTError:
-        tg_id = None
     return await auth(tg_id, request, storage)

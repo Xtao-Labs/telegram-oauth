@@ -1,13 +1,11 @@
-from httpx import URL
 from pyrogram import filters, Client
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, LoginUrl
 
 from src.bot import bot
 from src.config import settings
 from src.telegram.enums import Message
 from src.telegram.message import NO_ACCOUNT_MSG, LOGIN_MSG, LOGIN_BUTTON
 from src.users.crud import get_user_crud
-from src.utils.telegram import encode_telegram_auth_data
 
 
 async def login(message: Message):
@@ -17,15 +15,12 @@ async def login(message: Message):
     if not user:
         await message.reply(NO_ACCOUNT_MSG % uid, quote=True)
         return
-    token = await encode_telegram_auth_data(uid)
-    url = settings.PROJECT_URL + "/api/users/auth"
-    url = URL(url).copy_add_param("jwt", token)
-    url = str(url)
+    url = settings.PROJECT_URL + "/api/users/callback"
     await message.reply(
         LOGIN_MSG,
         quote=True,
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(LOGIN_BUTTON, url=url)]]
+            [[InlineKeyboardButton(LOGIN_BUTTON, login_url=LoginUrl(url=url))]]
         ),
     )
 
