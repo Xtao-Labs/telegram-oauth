@@ -5,6 +5,7 @@ from aioauth.server import AuthorizationServer
 from fastapi import APIRouter, Depends, Request
 
 from aioauth_fastapi.utils import to_fastapi_response, to_oauth2_request
+from .models import Configuration
 from .storage import Storage
 from ..config import settings as local_settings
 from ..storage.sqlalchemy import SQLAlchemyStorage, get_sqlalchemy_storage
@@ -52,5 +53,24 @@ async def authorize(
 
 
 @router.get("/keys")
+@router.get("/.well-known/jwks.json")
 async def keys():
     return get_pub_key_resp()
+
+
+@router.get("/.well-known/openid-configuration")
+async def get_configuration():
+    return Configuration(
+        issuer=local_settings.PROJECT_URL,
+        authorization_endpoint=f"{local_settings.PROJECT_URL}/oauth2/authorize",
+        token_endpoint=f"{local_settings.PROJECT_URL}/oauth2/token",
+        userinfo_endpoint="",
+        revocation_endpoint="",
+        jwks_uri=f"{local_settings.PROJECT_URL}/oauth2/.well-known/jwks.json",
+        scopes_supported=["openid", "profile", "email"],
+        response_types_supported=["code"],
+        grant_types_supported=["authorization_code", "refresh_token"],
+        subject_types_supported=["public"],
+        id_token_signing_alg_values_supported=["RS256"],
+        claims_supported=["username", "email"],
+    )

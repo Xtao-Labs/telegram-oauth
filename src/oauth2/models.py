@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 
+from pydantic import BaseModel
 from pydantic.types import UUID4
 from sqlmodel.main import Field, Relationship
 
@@ -48,3 +49,18 @@ class Token(BaseTable, table=True):  # type: ignore
 
     user_id: UUID4 = Field(foreign_key="users.id", nullable=False)
     user: "User" = Relationship(back_populates="user_tokens")
+
+
+class Configuration(BaseModel):
+    issuer: str
+    authorization_endpoint: str
+    token_endpoint: str
+    userinfo_endpoint: str
+    revocation_endpoint: str
+    jwks_uri: str
+    scopes_supported: List[str]
+    response_types_supported: List[str]
+    grant_types_supported: List[str]
+    subject_types_supported: List[str]
+    id_token_signing_alg_values_supported: List[str]
+    claims_supported: List[str]

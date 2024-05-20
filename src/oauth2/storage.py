@@ -276,7 +276,10 @@ class Storage(BaseStorage):
     ) -> str:
         scopes = enforce_list(scope)
         user = await self.get_user(request)
-        user_data = {}
+        user_data = {
+            "aud": client_id,
+            "iss": settings.PROJECT_URL,
+        }
 
         if "email" in scopes:
             user_data["email"] = user.username

@@ -6,7 +6,8 @@
 CONN_URI=sqlite+aiosqlite:///data/db.sqlite3 # 数据库 uri
 DEBUG=True # 调试模式
 PROJECT_URL=http://127.0.0.1 # 项目可访问的地址
-PROJECT_LOGIN_SUCCESS_URL=http://google.com # 登录成功后跳转的地址
+PROJECT_LOGIN_SUCCESS_URL=http://google.com # 默认登录成功后跳转的地址
+PROJECT_HOST=127.0.0.1  # 项目监听的 ip 地址
 PROJECT_PORT=80 # 项目运行的端口
 JWT_PRIVATE_KEY='data/private_key' # jwt 私钥
 JWT_PUBLIC_KEY='data/public_key' # jwt 公钥
